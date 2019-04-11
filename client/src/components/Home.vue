@@ -1,6 +1,6 @@
 <template>
   <v-container>
-    <h2>Home Component</h2>
+    <h1>Home</h1>
   </v-container>
 </template>
 
