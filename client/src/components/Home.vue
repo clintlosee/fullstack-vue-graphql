@@ -1,13 +1,10 @@
 <template>
-  <div>
+  <v-container>
     <h2>Home Component</h2>
-    <v-btn color="primary"> Button</v-btn>
-  </div>
+  </v-container>
 </template>
 
 <script>
-// @ is an alias to /src
-
 export default {
   name: "home",
   components: {}
