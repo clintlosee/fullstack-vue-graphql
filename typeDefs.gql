@@ -25,6 +25,10 @@ type Post {
   messages: [Message]
 }
 
+type Token {
+  token: String!
+}
+
 type Message {
   _id: ID
   messageBody: String!
@@ -33,7 +37,8 @@ type Message {
 }
 
 type Mutation {
-  signupUser(username: String!, email: String!, password: String!): User!
+  signinUser(username: String!, password: String!): Token
+  signupUser(username: String!, email: String!, password: String!): Token
   addPost(
     title: String!
     imageUrl: String!

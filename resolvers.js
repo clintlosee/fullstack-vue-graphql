@@ -1,4 +1,10 @@
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
+
+const createToken = (user, secret, expiresIn) => {
+  const { username, email } = user;
+  return jwt.sign({ username, email }, secret, { expiresIn });
+};
 
 module.exports = {
   Query: {
@@ -27,7 +33,7 @@ module.exports = {
         throw new Error('Invalid password');
       }
 
-      return user;
+      return { token: createToken(user, process.env.SECRET, '1hr') };
     },
 
     signupUser: async (parent, { username, email, password }, { User }) => {
@@ -43,7 +49,7 @@ module.exports = {
         password,
       }).save();
 
-      return newUser;
+      return { token: createToken(newUser, process.env.SECRET, '1hr') };
     },
 
     addPost: async (
