@@ -1,9 +1,24 @@
 <template>
-  <v-container text-xs-center v-if="getPosts">
+  <v-container text-xs-center>
+    <v-layout row>
+      <v-dialog v-model="loading" persistent fullscreen>
+        <v-container fill-height>
+          <v-layout row justify-center align-center>
+            <v-progress-circular
+              indeterminate
+              :size="70"
+              :width="7"
+              color="primary"
+            ></v-progress-circular>
+          </v-layout>
+        </v-container>
+      </v-dialog>
+    </v-layout>
+
     <v-flex xs12>
-      <v-carousel v-bind="{ cycle: true }" interval="3000">
+      <v-carousel v-if="!loading && posts.length > 0" interval="3000">
         <v-carousel-item
-          v-for="post in getPosts"
+          v-for="post in posts"
           :key="post._id"
           :src="post.imageUrl"
         >
@@ -37,66 +52,93 @@
 </template>
 
 <script>
-import { gql } from "apollo-boost";
+// import { gql } from "apollo-boost";
+import { mapGetters } from "vuex";
 
 export default {
   name: "home",
   components: {},
   data() {
     return {
-      posts: [],
-      getPostsQuery: gql`
-        query {
-          getPosts {
-            _id
-            title
-            imageUrl
-            categories
-            description
-            createdDate
-            likes
-            createdBy {
-              _id
-              username
-              email
-              password
-              joinDate
-            }
-          }
-        }
-      `
+      // posts: []
+      // getPostsQuery: gql`
+      //   query {
+      //     getPosts {
+      //       _id
+      //       title
+      //       imageUrl
+      //       categories
+      //       description
+      //       createdDate
+      //       likes
+      //       createdBy {
+      //         _id
+      //         username
+      //         email
+      //         password
+      //         joinDate
+      //       }
+      //     }
+      //   }
+      // `
     };
   },
-  apollo: {
-    getPosts: {
-      query: gql`
-        query {
-          getPosts {
-            _id
-            title
-            imageUrl
-            categories
-            description
-            createdDate
-            likes
-            createdBy {
-              _id
-              username
-              email
-              password
-              joinDate
-            }
-          }
-        }
-      `,
-      result({ data, loading }) {
-        if (!loading) {
-          this.posts = data.getPosts;
-        }
-      },
-      error(err) {
-        console.log("ERROR:", err);
-      }
+  // apollo: {
+  //   getPosts: {
+  //     query: gql`
+  //       query {
+  //         getPosts {
+  //           _id
+  //           title
+  //           imageUrl
+  //           categories
+  //           description
+  //           createdDate
+  //           likes
+  //           createdBy {
+  //             _id
+  //             username
+  //             email
+  //             password
+  //             joinDate
+  //           }
+  //         }
+  //       }
+  //     `,
+  //     result({ data, loading }) {
+  //       if (!loading) {
+  //         this.posts = data.getPosts;
+  //       }
+  //     },
+  //     error(err) {
+  //       console.log("ERROR:", err);
+  //     }
+  //   }
+  // },
+
+  created() {
+    this.handleGetCarouselPosts();
+  },
+
+  computed: {
+    ...mapGetters({
+      posts: "posts",
+      loading: "loading"
+    })
+
+    // posts() {
+    //   return this.$store.getters.posts;
+    // },
+
+    // loading() {
+    //   return this.$store.getters.loading;
+    // }
+  },
+
+  methods: {
+    handleGetCarouselPosts() {
+      //* reach out to Vuex store and fire action to get posts
+      this.$store.dispatch("getPosts");
     }
   }
 };
