@@ -1,6 +1,8 @@
 import Vue from 'vue';
 import Router from 'vue-router';
 
+import AuthGuard from '../AuthGuard';
+
 //* Code splitting import components
 const Home = () =>
   import(/* webpackChunkName: "home" */ '@/components/Home.vue');
@@ -42,6 +44,7 @@ export default new Router({
       path: '/profile',
       name: 'Profile',
       component: Profile,
+      beforeEnter: AuthGuard,
     },
     {
       path: '/signin',
