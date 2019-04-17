@@ -31,20 +31,7 @@ export default new Vuex.Store({
       state.user = payload;
     },
 
-    setLoadingState(state) {
-      state.loading = true;
-    },
-
-    userSuccess(state) {
-      state.loading = false;
-    },
-
-    userFailed(state) {
-      state.loading = false;
-    },
-
     setLoading(state, payload) {
-      console.log('payload setLoading:', payload);
       state.loading = payload;
     },
 
@@ -63,17 +50,17 @@ export default new Vuex.Store({
 
   actions: {
     getCurrentUser: ({ commit }) => {
-      commit('setLoadingState');
+      commit('setLoading', true);
       apolloClient
         .query({
           query: GET_CURRENT_USER,
         })
         .then(({ data }) => {
-          commit('userSuccess');
+          commit('setLoading', false);
           commit('setUser', data.getCurrentUser);
         })
         .catch(err => {
-          commit('userFailed');
+          commit('setLoading', false);
           console.error('GETCURRENTUSER ERROR:', err);
         });
     },
@@ -99,6 +86,7 @@ export default new Vuex.Store({
 
     signinUser: ({ commit }, payload) => {
       commit('clearError');
+      commit('setLoading', true);
       localStorage.setItem('token', '');
 
       apolloClient
@@ -107,12 +95,14 @@ export default new Vuex.Store({
           variables: payload,
         })
         .then(({ data }) => {
+          commit('setLoading', false);
           localStorage.setItem('token', data.signinUser.token);
 
           //* to make sure created method is run in main.js (we run getCurrentUser), reload page
           router.go();
         })
         .catch(err => {
+          commit('setLoading', false);
           commit('setError', err);
           console.error(err);
         });
