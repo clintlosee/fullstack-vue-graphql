@@ -7,6 +7,11 @@ import App from './App.vue';
 import router from './router';
 import store from './store';
 
+import FormAlert from './components/Shared/FormAlert.vue';
+
+//* Register Global Component
+Vue.component('form-alert', FormAlert);
+
 Vue.use(VueApollo);
 
 //* Setup ApolloClient
