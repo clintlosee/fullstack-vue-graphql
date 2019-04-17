@@ -12,6 +12,7 @@ export default new Vuex.Store({
     posts: [],
     user: null,
     loading: false,
+    authError: null,
     error: null,
   },
 
@@ -19,6 +20,7 @@ export default new Vuex.Store({
     posts: state => state.posts,
     user: state => state.user,
     loading: state => state.loading,
+    authError: state => state.authError,
     error: state => state.error,
   },
 
@@ -37,6 +39,10 @@ export default new Vuex.Store({
 
     setError(state, payload) {
       state.error = payload;
+    },
+
+    setAuthError(state, payload) {
+      state.authError = payload;
     },
 
     clearUser(state) {
