@@ -55,8 +55,8 @@
                 <v-flex xs12>
                   <v-btn
                     :loading="loading"
+                    :disabled="!isFormValid || loading"
                     color="accent"
-                    :disabled="!isFormValid"
                     type="submit"
                   >
                     <span slot="loader" class="custom-loader">
@@ -78,7 +78,7 @@
   </v-container>
 </template>
 
-<script lang="ts">
+<script>
 import { mapGetters } from 'vuex';
 
 export default {
