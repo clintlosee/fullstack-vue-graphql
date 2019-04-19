@@ -54,7 +54,14 @@
             <v-flex xs12>
               <v-select
                 v-model="categories"
-                :items="['Art', 'Travel', 'Photography', 'Technology']"
+                :items="[
+                  'Art',
+                  'Travel',
+                  'Food',
+                  'Furniture',
+                  'Photography',
+                  'Technology'
+                ]"
                 :rules="categoriesRules"
                 multiple
                 label="Categories"
