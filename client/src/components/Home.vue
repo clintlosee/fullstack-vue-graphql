@@ -53,10 +53,10 @@
 
 <script>
 // import { gql } from "apollo-boost";
-import { mapGetters } from "vuex";
+import { mapGetters } from 'vuex';
 
 export default {
-  name: "home",
+  name: 'home',
   components: {},
   data() {
     return {
@@ -122,8 +122,8 @@ export default {
 
   computed: {
     ...mapGetters({
-      posts: "posts",
-      loading: "loading"
+      posts: 'posts',
+      loading: 'loading'
     })
 
     // posts() {
@@ -138,7 +138,7 @@ export default {
   methods: {
     handleGetCarouselPosts() {
       //* reach out to Vuex store and fire action to get posts
-      this.$store.dispatch("getPosts");
+      this.$store.dispatch('getPosts');
     }
   }
 };

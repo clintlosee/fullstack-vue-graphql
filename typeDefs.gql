@@ -1,6 +1,7 @@
 type Query {
   getCurrentUser: User
   getPosts: [Post]
+  infiniteScrollPosts(pageNum: Int!, pageSize: Int!): PostsPage
 }
 
 type User {
@@ -23,6 +24,11 @@ type Post {
   likes: Int
   createdBy: User!
   messages: [Message]
+}
+
+type PostsPage {
+  posts: [Post]
+  hasMore: Boolean
 }
 
 type Token {
