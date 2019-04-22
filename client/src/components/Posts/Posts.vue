@@ -1,6 +1,7 @@
 <template>
-  <v-container text-xs-center>
+  <v-container text-xs-center v-if="infiniteScrollPosts">
     <h1>posts</h1>
+    <!-- {{ infiniteScrollPosts.posts }} -->
     <div v-for="post in infiniteScrollPosts.posts" :key="post._id">
       <img :src="post.imageUrl" height="100px" />
       <h3>{{ post.title }}</h3>
@@ -17,14 +18,12 @@ const pageSize = 2;
 
 export default {
   name: 'Posts',
-
   data() {
     return {
       pageNum: 1,
       showMoreEnabled: true
     };
   },
-
   apollo: {
     infiniteScrollPosts: {
       query: INFINITE_SCROLL_POSTS,
@@ -34,7 +33,6 @@ export default {
       }
     }
   },
-
   methods: {
     showMorePosts() {
       this.pageNum += 1;
