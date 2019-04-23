@@ -1,13 +1,70 @@
 <template>
-  <v-container text-xs-center v-if="infiniteScrollPosts">
-    <h1>posts</h1>
-    <!-- {{ infiniteScrollPosts.posts }} -->
-    <div v-for="post in infiniteScrollPosts.posts" :key="post._id">
-      <img :src="post.imageUrl" height="100px" />
-      <h3>{{ post.title }}</h3>
-    </div>
+  <v-container fluid grid-list-xl>
+    <!-- Post Cards -->
+    <v-layout row wrap v-if="infiniteScrollPosts">
+      <v-flex
+        xs12
+        sm6
+        v-for="post in infiniteScrollPosts.posts"
+        :key="post._id"
+      >
+        <v-card hover>
+          <v-img :src="post.imageUrl" height="30vh" lazy></v-img>
 
-    <v-btn @click="showMorePosts" v-if="showMoreEnabled">Fetch More</v-btn>
+          <v-card-actions>
+            <v-card-title primary>
+              <div>
+                <div class="headline">{{ post.title }}</div>
+                <span class="grey--text">
+                  {{ post.likes }} likes - {{ post.messages.length }}
+                </span>
+              </div>
+            </v-card-title>
+            <v-spacer></v-spacer>
+            <v-btn @click="showPostCreator = !showPostCreator" icon>
+              <v-icon>
+                {{ `keyboard_arrow_${showPostCreator ? 'up' : 'down'}` }}
+              </v-icon>
+            </v-btn>
+          </v-card-actions>
+
+          <!-- Post Creator Title -->
+          <v-slide-y-transition>
+            <v-card-text v-show="showPostCreator" class="grey lighten-4">
+              <v-list-tile avatar>
+                <v-list-tile-avatar>
+                  <img :src="post.createdBy.avatar" alt="Avatar" />
+                </v-list-tile-avatar>
+
+                <v-list-tile-content>
+                  <v-list-tile-title class="text--primary">
+                    {{ post.createdBy.username }}
+                  </v-list-tile-title>
+                  <v-list-tile-sub-title class="font-weight-thin">
+                    Added {{ post.createdDate }}
+                  </v-list-tile-sub-title>
+                </v-list-tile-content>
+
+                <v-list-tile-action>
+                  <v-btn icon ripple>
+                    <v-icon color="info">info</v-icon>
+                  </v-btn>
+                </v-list-tile-action>
+              </v-list-tile>
+            </v-card-text>
+          </v-slide-y-transition>
+        </v-card>
+      </v-flex>
+    </v-layout>
+
+    <!-- Fetch More Btn -->
+    <v-layout column v-if="showMoreEnabled">
+      <v-flex xs12>
+        <v-layout justify-center row>
+          <v-btn color="accent" @click="showMorePosts">Fetch More</v-btn>
+        </v-layout>
+      </v-flex>
+    </v-layout>
   </v-container>
 </template>
 
@@ -21,7 +78,8 @@ export default {
   data() {
     return {
       pageNum: 1,
-      showMoreEnabled: true
+      showMoreEnabled: true,
+      showPostCreator: false
     };
   },
   apollo: {
