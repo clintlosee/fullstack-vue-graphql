@@ -11,6 +11,8 @@ const AddPost = () =>
   import(/* webpackChunkName: "addPost" */ '@/components/Posts/AddPost.vue');
 const Posts = () =>
   import(/* webpackChunkName: "posts" */ '@/components/Posts/Posts.vue');
+const Post = () =>
+  import(/* webpackChunkName: "post" */ '@/components/Posts/Post.vue');
 
 const Profile = () =>
   import(/* webpackChunkName: "profile" */ '@/components/Auth/Profile.vue');
@@ -34,6 +36,12 @@ export default new Router({
       path: '/posts',
       name: 'Posts',
       component: Posts,
+    },
+    {
+      path: '/posts/:postId',
+      name: 'Post',
+      component: Post,
+      props: true,
     },
     {
       path: '/post/add',
