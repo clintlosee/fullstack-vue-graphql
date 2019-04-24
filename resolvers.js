@@ -24,7 +24,6 @@ module.exports = {
     },
 
     getPosts: async (parent, args, { Post }) => {
-      console.log('get posts query');
       const posts = Post.find({})
         .sort({ createdDate: 'desc' })
         .populate({
@@ -43,7 +42,6 @@ module.exports = {
     },
 
     infiniteScrollPosts: async (parent, { pageNum, pageSize }, { Post }) => {
-      console.log('inf scroll post');
       let posts;
       if (pageNum === 1) {
         posts = await Post.find({})
