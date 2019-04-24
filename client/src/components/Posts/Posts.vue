@@ -8,13 +8,20 @@
         v-for="post in infiniteScrollPosts.posts"
         :key="post._id"
       >
-        <v-card @click.native="goToPost(post._id)" hover>
-          <v-img :src="post.imageUrl" height="30vh" lazy></v-img>
+        <v-card hover>
+          <v-img
+            @click.native="goToPost(post._id)"
+            :src="post.imageUrl"
+            height="30vh"
+            lazy
+          ></v-img>
 
           <v-card-actions>
             <v-card-title primary>
               <div>
-                <div class="headline">{{ post.title }}</div>
+                <div @click="goToPost(post._id)" class="headline">
+                  {{ post.title }}
+                </div>
                 <span class="grey--text">
                   {{ post.likes }} likes - {{ post.messages.length }}
                 </span>
@@ -62,6 +69,9 @@
       <v-flex xs12>
         <v-layout justify-center row>
           <v-btn color="accent" @click="showMorePosts">Fetch More</v-btn>
+          <v-btn color="info" class="black--text" @click="showMorePosts"
+            >Fetch More</v-btn
+          >
         </v-layout>
       </v-flex>
     </v-layout>

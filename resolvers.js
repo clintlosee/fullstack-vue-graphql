@@ -70,6 +70,30 @@ module.exports = {
   },
 
   Mutation: {
+    addPostMessage: async (
+      parent,
+      { messageBody, userId, postId },
+      { Post }
+    ) => {
+      const newMessage = {
+        messageBody,
+        messageUser: userId,
+      };
+      const post = await Post.findOneAndUpdate(
+        //* first find post by id
+        { _id: postId },
+        //* prepend new message to beginning of messages array
+        { $push: { messages: { $each: [newMessage], $position: 0 } } },
+        //* return fresh document after update
+        { new: true }
+      ).populate({
+        path: 'messages.messageUser',
+        model: 'User',
+      });
+
+      return post.messages[0];
+    },
+
     signinUser: async (parent, { username, password }, { User }) => {
       const user = await User.findOne({ username });
 
