@@ -34,6 +34,14 @@ module.exports = {
       return posts;
     },
 
+    getPost: async (parent, { postId }, { Post }) => {
+      const post = Post.findOne({ _id: postId }).populate({
+        path: 'messages.messageUser',
+        model: 'User',
+      });
+      return post;
+    },
+
     infiniteScrollPosts: async (parent, { pageNum, pageSize }, { Post }) => {
       console.log('inf scroll post');
       let posts;
