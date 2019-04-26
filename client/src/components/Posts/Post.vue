@@ -6,10 +6,12 @@
         <v-card hover>
           <v-card-title>
             <h1>{{ getPost.title }}</h1>
-            <!-- <v-btn @click="handleUnlikePost">unlike</v-btn> -->
-            <v-btn @click="handleLikePost" large icon v-if="user">
-              <!-- <v-btn @click="handleUnlikePost" large icon v-if="user"> -->
-              <v-icon large color="grey">favorite</v-icon>
+            <v-btn @click="handleToggleLike" large icon v-if="user">
+              <v-icon
+                large
+                :color="checkIfPostLiked(getPost._id) ? 'red' : 'grey'"
+                >favorite</v-icon
+              >
             </v-btn>
             <h3 class="ml-3 font-weight-thin">{{ getPost.likes }} LIKES</h3>
             <v-spacer></v-spacer>
@@ -137,6 +139,7 @@ export default {
     return {
       dialog: false,
       isFormValid: true,
+      postLike: false,
       messageBody: '',
       messageRules: [
         message => !!message || 'Message is required',
@@ -148,10 +151,30 @@ export default {
   },
 
   computed: {
-    ...mapGetters(['user'])
+    ...mapGetters(['user', 'userFavorites'])
   },
 
   methods: {
+    checkIfPostLiked(postId) {
+      //* Check if user favorites includes post with idof 'postId'
+      if (
+        this.userFavorites &&
+        this.userFavorites.some(fave => fave._id === postId)
+      ) {
+        this.postLiked = true;
+        return true;
+      } else {
+        this.postLiked = false;
+        return false;
+      }
+    },
+
+    handleToggleLike() {
+      if (this.postLiked) {
+        this.handleUnlikePost();
+      } else this.handleLikePost();
+    },
+
     handleLikePost() {
       const variables = {
         postId: this.postId,
