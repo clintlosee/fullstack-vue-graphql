@@ -41,6 +41,24 @@ module.exports = {
       return post;
     },
 
+    searchPosts: async (parent, { searchTerm }, { Post }) => {
+      if (searchTerm) {
+        const searchResults = Post.find(
+          //* Perform text search for search value of 'searchTerm'
+          { $text: { $search: searchTerm } },
+          //* Assign 'searchTerm' a text score to provide best match
+          { score: { $meta: 'textScore' } }
+          //* Sort results according to that textScore as well as likes in desc order
+        )
+          .sort({
+            score: { $meta: 'textScore' },
+            likes: 'desc',
+          })
+          .limit(5);
+        return searchResults;
+      }
+    },
+
     infiniteScrollPosts: async (parent, { pageNum, pageSize }, { Post }) => {
       let posts;
       if (pageNum === 1) {
@@ -133,7 +151,6 @@ module.exports = {
         path: 'favorites',
         model: 'Post',
       });
-      console.log('unlike post user:', user);
 
       //* Return only likes from 'post' and favorites from 'user'
       return { likes: post.likes, favorites: user.favorites };

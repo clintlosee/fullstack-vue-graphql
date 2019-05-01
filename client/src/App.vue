@@ -56,6 +56,8 @@
         color="accent"
         single-line
         hide-details
+        v-model="searchTerm"
+        @input="handleSearchPosts"
       ></v-text-field>
 
       <v-spacer></v-spacer>
@@ -146,7 +148,8 @@ export default {
       sideNav: false,
       authSnackbar: false,
       authErrorSnackbar: false,
-      badgeAnimated: false
+      badgeAnimated: false,
+      searchTerm: ''
     };
   },
 
@@ -157,6 +160,12 @@ export default {
 
     handleSignoutUser() {
       this.$store.dispatch('signoutUser');
+    },
+
+    handleSearchPosts() {
+      this.$store.dispatch('searchPosts', {
+        searchTerm: this.searchTerm
+      });
     }
   },
 
