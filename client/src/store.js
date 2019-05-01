@@ -17,6 +17,7 @@ Vue.use(Vuex);
 export default new Vuex.Store({
   state: {
     posts: [],
+    searchResults: [],
     user: null,
     loading: false,
     authError: null,
@@ -25,6 +26,7 @@ export default new Vuex.Store({
 
   getters: {
     posts: state => state.posts,
+    searchResults: state => state.searchResults,
     user: state => state.user,
     userFavorites: state => state.user && state.user.favorites,
     loading: state => state.loading,
@@ -35,6 +37,14 @@ export default new Vuex.Store({
   mutations: {
     setPosts(state, payload) {
       state.posts = payload;
+    },
+
+    setSearchResults(state, payload) {
+      if (payload !== null) {
+        state.searchResults = payload;
+      } else {
+        state.searchResults = [];
+      }
     },
 
     setUser(state, payload) {
@@ -53,13 +63,11 @@ export default new Vuex.Store({
       state.authError = payload;
     },
 
-    clearUser(state) {
-      state.user = null;
-    },
+    clearUser: state => (state.user = null),
 
-    clearError(state) {
-      state.error = null;
-    },
+    clearError: state => (state.error = null),
+
+    clearSearchResults: state => (state.searchResults = []),
   },
 
   actions: {
@@ -105,6 +113,7 @@ export default new Vuex.Store({
           variables: payload,
         })
         .then(({ data }) => {
+          commit('setSearchResults', data.searchPosts);
           console.log(data.searchPosts);
         })
         .catch(err => console.error(err));

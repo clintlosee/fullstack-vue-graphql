@@ -60,6 +60,29 @@
         @input="handleSearchPosts"
       ></v-text-field>
 
+      <!-- Search Results Card -->
+      <v-card id="search__card" dark v-if="searchResults.length">
+        <v-list>
+          <v-list-tile
+            @click="goToSearchResult(result._id)"
+            v-for="result in searchResults"
+            :key="result._id"
+          >
+            <v-list-tile-title>
+              {{ result.title }} -
+              <span class="font-weight-thin">
+                {{ formatDescription(result.description) }}
+              </span>
+            </v-list-tile-title>
+
+            <!-- Show icon if favorited -->
+            <v-list-tile-action v-if="checkIfUserFavorite(result._id)">
+              <v-icon>favorite</v-icon>
+            </v-list-tile-action>
+          </v-list-tile>
+        </v-list>
+      </v-card>
+
       <v-spacer></v-spacer>
 
       <!-- Horizontal Navbar Links -->
@@ -166,6 +189,26 @@ export default {
       this.$store.dispatch('searchPosts', {
         searchTerm: this.searchTerm
       });
+    },
+
+    goToSearchResult(resultId) {
+      //* clear the search term
+      this.searchTerm = '';
+      //* go to the desired result
+      this.$router.push(`/posts/${resultId}`);
+      //* clear the search results
+      this.$store.commit('clearSearchResults');
+    },
+
+    formatDescription(desc) {
+      return desc.length > 30 ? `${desc.slice(0, 30)}...` : desc;
+    },
+
+    checkIfUserFavorite(resultId) {
+      return (
+        this.userFavorites &&
+        this.userFavorites.some(fave => fave._id === resultId)
+      );
     }
   },
 
@@ -191,7 +234,8 @@ export default {
       user: 'user',
       userFavorites: 'userFavorites',
       loading: 'loading',
-      authError: 'authError'
+      authError: 'authError',
+      searchResults: 'searchResults'
     }),
 
     horizontalNavItems() {
@@ -241,6 +285,15 @@ export default {
 .fade-enter,
 .fade-leave-to {
   opacity: 0;
+}
+
+/* Search Results Card */
+#search__card {
+  position: absolute;
+  width: 100vw;
+  z-index: 8;
+  top: 100%;
+  left: 0%;
 }
 
 /* User Favorite Animation */
