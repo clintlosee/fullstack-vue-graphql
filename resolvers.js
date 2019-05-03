@@ -41,6 +41,13 @@ module.exports = {
       return post;
     },
 
+    getUserPosts: async (parent, { userId }, { Post }) => {
+      const posts = await Post.find({
+        createdBy: userId,
+      });
+      return posts;
+    },
+
     searchPosts: async (parent, { searchTerm }, { Post }) => {
       if (searchTerm) {
         const searchResults = Post.find(
