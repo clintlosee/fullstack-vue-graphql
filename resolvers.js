@@ -95,6 +95,28 @@ module.exports = {
   },
 
   Mutation: {
+    updateUserPost: async (
+      parent,
+      { postId, userId, title, description, imageUrl, categories },
+      { Post }
+    ) => {
+      console.log('in mutation');
+      const post = await Post.findOneAndUpdate(
+        //* Find post by postId and createdBy
+        { _id: postId, createdBy: userId },
+        {
+          $set: {
+            title,
+            imageUrl,
+            description,
+            categories,
+          },
+        },
+        { new: true }
+      );
+      return post;
+    },
+
     addPostMessage: async (
       parent,
       { messageBody, userId, postId },
