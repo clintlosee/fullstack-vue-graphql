@@ -121,7 +121,6 @@ export default new Vuex.Store({
         })
         .then(({ data }) => {
           commit('setUserPosts', data.getUserPosts);
-          console.log(data.getUserPosts);
         })
         .catch(err => console.error(err));
     },
