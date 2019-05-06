@@ -81,7 +81,14 @@
               >
                 <v-icon>edit</v-icon>
               </v-btn>
-              <v-btn color="error" floating fab small dark>
+              <v-btn
+                @click="handleDeleteUserPost(post)"
+                color="error"
+                floating
+                fab
+                small
+                dark
+              >
                 <v-icon>delete</v-icon>
               </v-btn>
             </div>
@@ -247,6 +254,18 @@ export default {
           description: this.description
         });
         this.editPostDialog = false;
+      }
+    },
+
+    handleDeleteUserPost(post) {
+      this.loadPost(post, false);
+      const deletePost = window.confirm(
+        'Are you sure you want to delete this post?'
+      );
+      if (deletePost) {
+        this.$store.dispatch('deleteUserPost', {
+          postId: this.postId
+        });
       }
     },
 

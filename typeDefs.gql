@@ -55,6 +55,7 @@ type Mutation {
   signinUser(username: String!, password: String!): Token
   signupUser(username: String!, email: String!, password: String!): Token
   addPostMessage(messageBody: String!, userId: ID!, postId: ID!): Message!
+  deleteUserPost(postId: ID!): Post!
   updateUserPost(
     postId: ID!
     userId: ID!
