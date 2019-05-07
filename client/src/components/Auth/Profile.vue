@@ -73,7 +73,7 @@
       </v-flex>
       <v-layout row wrap>
         <v-flex xs12 sm6 v-for="post in userPosts" :key="post._id">
-          <v-card @click="goToPost(post._id)" class="mt-3 ml-1 mr-2" hover>
+          <v-card class="mt-3 ml-1 mr-2" hover>
             <div class="text-xs-center">
               <v-btn
                 @click="loadPost(post)"
@@ -96,7 +96,11 @@
                 <v-icon>delete</v-icon>
               </v-btn>
             </div>
-            <v-img height="30vh" :src="post.imageUrl"></v-img>
+            <v-img
+              @click="goToPost(post._id)"
+              height="30vh"
+              :src="post.imageUrl"
+            ></v-img>
             <v-card-text>{{ post.title }}</v-card-text>
           </v-card>
         </v-flex>

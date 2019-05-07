@@ -136,7 +136,6 @@ export default new Vuex.Store({
         })
         .then(({ data }) => {
           commit('setSearchResults', data.searchPosts);
-          console.log(data.searchPosts);
         })
         .catch(err => console.error(err));
     },
