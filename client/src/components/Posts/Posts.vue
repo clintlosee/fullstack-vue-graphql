@@ -23,7 +23,7 @@
                   {{ post.title }}
                 </div>
                 <span class="grey--text">
-                  {{ post.likes }} likes - {{ post.messages.length }}
+                  {{ post.likes }} likes - {{ post.messages.length }} Comments
                 </span>
               </div>
             </v-card-title>
@@ -48,7 +48,7 @@
                     {{ post.createdBy.username }}
                   </v-list-tile-title>
                   <v-list-tile-sub-title class="font-weight-thin">
-                    Added {{ post.createdDate }}
+                    Added {{ formatCreatedDate(post.createdDate) }}
                   </v-list-tile-sub-title>
                 </v-list-tile-content>
 
@@ -69,9 +69,9 @@
       <v-flex xs12>
         <v-layout justify-center row>
           <v-btn color="accent" @click="showMorePosts">Fetch More</v-btn>
-          <v-btn color="info" class="black--text" @click="showMorePosts"
-            >Fetch More</v-btn
-          >
+          <!-- <v-btn color="info" class="black--text" @click="showMorePosts"
+            >Fetch More
+          </v-btn> -->
         </v-layout>
       </v-flex>
     </v-layout>
@@ -79,6 +79,7 @@
 </template>
 
 <script>
+import moment from 'moment';
 import { INFINITE_SCROLL_POSTS } from '../../queries';
 
 const pageSize = 2;
@@ -88,7 +89,7 @@ export default {
   data() {
     return {
       pageNum: 1,
-      showMoreEnabled: true,
+      // showMoreEnabled: true,
       showPostCreator: false
     };
   },
@@ -101,7 +102,18 @@ export default {
       }
     }
   },
+
+  computed: {
+    showMoreEnabled() {
+      return this.infiniteScrollPosts && this.infiniteScrollPosts.hasMore;
+    }
+  },
+
   methods: {
+    formatCreatedDate(date) {
+      return moment(new Date(date)).format('ll');
+    },
+
     showMorePosts() {
       this.pageNum += 1;
       // fetch more data and transform original result
@@ -114,7 +126,7 @@ export default {
         updateQuery: (prevResult, { fetchMoreResult }) => {
           const newPosts = fetchMoreResult.infiniteScrollPosts.posts;
           const hasMore = fetchMoreResult.infiniteScrollPosts.hasMore;
-          this.showMoreEnabled = hasMore;
+          // this.showMoreEnabled = hasMore;
 
           return {
             infiniteScrollPosts: {

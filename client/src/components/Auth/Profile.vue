@@ -11,7 +11,7 @@
             <v-card-title primary-title>
               <div>
                 <div class="headline">{{ user.username }}</div>
-                <div>Joined {{ user.joinDate }}</div>
+                <div>Joined {{ formatJoinDate(user.joinDate) }}</div>
                 <div class="hidden-xs-only font-weight-regular white--text">
                   {{ user.favorites.length }} Favorites
                 </div>
@@ -44,7 +44,11 @@
       <v-layout row wrap>
         <v-flex xs12 sm6 v-for="favorite in userFavorites" :key="favorite._id">
           <v-card class="mt-3 ml-1 mr-2" hover>
-            <v-img height="30vh" :src="favorite.imageUrl"></v-img>
+            <v-img
+              @click="goToPost(favorite._id)"
+              height="30vh"
+              :src="favorite.imageUrl"
+            ></v-img>
             <v-card-text>{{ favorite.title }}</v-card-text>
           </v-card>
         </v-flex>
@@ -62,14 +66,14 @@
 
     <v-container class="mt-3" v-else>
       <v-flex xs12>
-        <h2 class="font-weight-light">
+        <h2 class="font-weight-light text-xs-center">
           Your Posts
-          <span class="font-weight-regular">{{ userPosts.lenght }}</span>
+          <span class="font-weight-regular">{{ userPosts.length }}</span>
         </h2>
       </v-flex>
       <v-layout row wrap>
         <v-flex xs12 sm6 v-for="post in userPosts" :key="post._id">
-          <v-card class="mt-3 ml-1 mr-2" hover>
+          <v-card @click="goToPost(post._id)" class="mt-3 ml-1 mr-2" hover>
             <div class="text-xs-center">
               <v-btn
                 @click="loadPost(post)"
@@ -198,7 +202,8 @@
   </v-container>
 </template>
 
-<script lang="ts">
+<script>
+import moment from 'moment';
 import { mapGetters } from 'vuex';
 
 export default {
@@ -237,6 +242,14 @@ export default {
   },
 
   methods: {
+    formatJoinDate(date) {
+      return moment(new Date(date)).format('ll');
+    },
+
+    goToPost(id) {
+      this.$router.push(`/posts/${id}`);
+    },
+
     handleGetUserPosts() {
       this.$store.dispatch('getUserPosts', {
         userId: this.user._id

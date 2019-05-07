@@ -1,5 +1,6 @@
 <template>
   <v-container text-xs-center>
+    <!-- Loading Spinner -->
     <v-layout row>
       <v-dialog v-model="loading" persistent fullscreen>
         <v-container fill-height>
@@ -15,6 +16,16 @@
       </v-dialog>
     </v-layout>
 
+    <!-- Explore Posts Button -->
+    <v-layout class="mt-2 mb-3" row wrap v-if="!loading">
+      <v-flex xs12>
+        <v-btn class="secondary" to="/posts" large dark>
+          Explore Posts
+        </v-btn>
+      </v-flex>
+    </v-layout>
+
+    <!-- Post Carousel -->
     <v-flex xs12>
       <v-carousel v-if="!loading && posts.length > 0" interval="3000">
         <v-carousel-item

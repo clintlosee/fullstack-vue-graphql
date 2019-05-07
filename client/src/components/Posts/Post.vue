@@ -101,9 +101,9 @@
                   </v-list-tile-title>
                   <v-list-tile-sub-title>
                     {{ message.messageUser.username }}
-                    <span class="grey--text text--lighten-1 hidden-xs-only">{{
-                      message.messageDate
-                    }}</span>
+                    <span class="grey--text text--lighten-1 hidden-xs-only">
+                      {{ getTimeFromNow(message.messageDate) }}
+                    </span>
                   </v-list-tile-sub-title>
                 </v-list-tile-content>
 
@@ -123,6 +123,7 @@
 </template>
 
 <script>
+import moment from 'moment';
 import { mapGetters } from 'vuex';
 import {
   GET_POST,
@@ -155,6 +156,10 @@ export default {
   },
 
   methods: {
+    getTimeFromNow(time) {
+      return moment(new Date(time)).fromNow();
+    },
+
     checkIfPostLiked(postId) {
       //* Check if user favorites includes post with idof 'postId'
       if (
